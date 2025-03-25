@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title  %}Contact Us{% endblock title  %}
+
+{% block body %}
+<h1 class="text-center">Contact Us</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        {% for message in messages %}
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        <div class="col-md-6"> <!-- Increased width from col-md-4 to col-md-6 -->
+            <center>
+                <form action="/contact/" method="post" class="p-4 shadow-lg rounded bg-light">
+                    {% csrf_token %}
+                    
+                    <label for="name" class="fw-bold">Full Name:</label>
+                    <div class="form-group mb-3">
+                        <input type="text" name="name" id="name" class="form-control form-control-lg p-3 w-100 w-md-75" required>
+                    </div>
+                  
+                    <label for="email" class="fw-bold">Email:</label>
+                    <div class="form-group mb-3">
+                        <input type="email" name="email" id="email" class="form-control form-control-lg p-3 w-100 w-md-75" value="{{user.email}}" required>
+                    </div>
+                  
+                    <label for="desc" class="fw-bold">How Can I Help You?</label>
+                    <div class="form-group mb-3">
+                        <textarea name="desc" id="desc" class="form-control form-control-lg p-3 w-100 w-md-75" rows="5" required></textarea>
+                    </div>
+                  
+                    <label for="pnumber" class="fw-bold">Phone Number:</label>
+                    <div class="form-group mb-3">
+                        <input type="number" name="pnumber" id="pnumber" class="form-control form-control-lg p-3 w-100 w-md-75" required>
+                    </div>
+                  
+                    <button type="submit" class="btn btn-primary btn-lg w-50">Submit</button>
+                </form>
+            </center>
+        </div>
+    </div>
+</div>
+{% endblock body %}

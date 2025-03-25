@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>My Orders</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Items</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Order Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.items_json }}</td>
+            <td>${{ order.amount }}</td>
+            <td>Processing</td>  <!-- You can update this based on your order tracking system -->
+            <td>{{ order.date }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No orders placed yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

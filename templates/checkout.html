@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %} Checkout {% endblock title %}
+
+{% block content %}
+<h1 class="text-center mt-4">🛍️ Final Step: Checkout</h1>
+{% endblock content %}
+
+{% block body %}
+{% load static %}
+
+<section id="checkout" class="checkout-section">
+  <div class="container">
+    <h3 class="text-center mt-4">🛒 Your Shopping Cart</h3>
+
+    <!-- Cart Items -->
+    <div class="cart-items-container mt-3">
+      <ul class="list-group" id="cart-items"></ul>
+    </div>
+
+    <!-- Checkout Form -->
+    <form method="POST" action="{% url 'checkout' %}" class="checkout-form mt-4 p-3 bg-light border rounded">
+      {% csrf_token %}
+      <h4>Customer Details</h4>
+      
+      <div class="mb-3">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" name="name" id="name" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" name="email" id="email" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="tel" name="phone" id="phone" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="address1" class="form-label">Address Line 1</label>
+        <input type="text" name="address1" id="address1" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="address2" class="form-label">Address Line 2</label>
+        <input type="text" name="address2" id="address2" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label for="city" class="form-label">City</label>
+        <input type="text" name="city" id="city" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="state" class="form-label">State</label>
+        <input type="text" name="state" id="state" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="zip_code" class="form-label">Zip Code</label>
+        <input type="text" name="zip_code" id="zip_code" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="payment-method" class="form-label">Payment Method</label>
+        <select name="payment-method" id="payment-method" class="form-control" required>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+          <option value="Online Payment">Online Payment</option>
+        </select>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="summary mt-4 p-3 bg-light border rounded">
+        <h4>Order Summary</h4>
+        <p><strong>Total Items:</strong> <span id="total-items">0</span></p>
+        <h4 class="text-success">Total Price: ₹ <span id="total-price">0.00</span></h4>
+        <button type="submit" class="btn btn-primary btn-lg mt-3 w-100">✅ Confirm Order</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .checkout-section { padding: 20px; }
+  .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #ddd; }
+  .summary { max-width: 400px; margin: auto; text-align: center; }
+  .checkout-form { max-width: 500px; margin: auto; }
+  button:hover { background-color: #28a745; }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let cart = JSON.parse(localStorage.getItem("cart")) || {};
+    updateCartDisplay(cart);
+
+    function updateCartDisplay(cart) {
+      let cartItems = document.getElementById("cart-items");
+      let totalPrice = 0;
+      let totalItems = 0;
+      cartItems.innerHTML = "";
+
+      for (let id in cart) {
+        let [quantity, name, price] = cart[id];
+        let itemTotal = quantity * parseFloat(price);
+        totalPrice += itemTotal;
+        totalItems += quantity;
+
+        cartItems.innerHTML += `
+          <li class="list-group-item cart-item">
+            <span>${name} (${quantity}x ₹${price}) = ₹${itemTotal.toFixed(2)}</span>
+          </li>`;
+      }
+
+      document.getElementById("total-price").innerText = totalPrice.toFixed(2);
+      document.getElementById("total-items").innerText = totalItems;
+    }
+  });
+</script>
+
+{% endblock body %}
